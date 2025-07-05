@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Workers, Service Workers, PWAs</title>
+</head>
+<body>
+    <h1>Web Workers, Service Workers, PWAs Demo</h1>
+    <p id="output">Computing...</p>
+
+    <script>
+        // Web Workers: Run scripts in background threads.
+        const worker = new Worker(URL.createObjectURL(new Blob([`
+            self.onmessage = (e) => {
+                let sum = 0;
+                for (let i = 0; i < e.data; i++) sum += i;
+                self.postMessage(sum);
+            };
+        `], { type: "text/javascript" })));
+        worker.onmessage = (e) => {
+            document.getElementById("output").textContent = `Worker Result: ${e.data}`;
+        };
+        worker.postMessage(1000000);
+
+        // Service Workers: Enable caching and offline support.
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("sw.js")
+                .then(reg => console.log("Service Worker Registered"))
+                .catch(err => console.log("Service Worker Error:", err));
+        }
+
+        // Progressive Web Apps (PWAs)
+        // Manifest file (conceptual, save as manifest.json):
+        /*
+        {
+            "name": "My PWA",
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": "#ffffff",
+            "icons": [{ "src": "icon.png", "sizes": "192x192", "type": "image/png" }]
+        }
+        */
+        // Service Worker for caching (sw.js):
+        /*
+        self.addEventListener("install", (event) => {
+            event.waitUntil(
+                caches.open("v1").then(cache =>
+                    cache.addAll(["/", "/index.html", "/styles.css"])
+                )
+            );
+        });
+        self.addEventListener("fetch", (event) => {
+            event.respondWith(caches.match(event.request) || fetch(event.request));
+        });
+        */
+    </script>
+</body>
+</html>

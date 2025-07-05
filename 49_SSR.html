@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modern Frameworks and SSR</title>
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.18.9/Babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // Modern Frameworks Integration (React)
+
+        // React Component
+        function App() {
+            const [count, setCount] = React.useState(0);
+            return (
+                <div>
+                    <h1>React Counter</h1>
+                    <p>Count: {count}</p>
+                    <button onClick={() => setCount(count + 1)}>Increment</button>
+                </div>
+            );
+        }
+
+        // State Management and Component Lifecycle
+        function LifecycleComponent() {
+            React.useEffect(() => {
+                console.log("Component mounted");
+                return () => console.log("Component unmounted");
+            }, []);
+            return <p>Lifecycle Demo</p>;
+        }
+
+        // Server-Side Rendering (Conceptual, e.g., Next.js)
+        // Next.js page (conceptual):
+        /*
+        export async function getServerSideProps() {
+            const data = await fetch("https://api.example.com/data").then(res => res.json());
+            return { props: { data } };
+        }
+        function Page({ data }) {
+            return <div>{data.title}</div>;
+        }
+        */
+        const SSRDemo = () => <p>SSR Simulated: {JSON.stringify({ title: "Server Data" })}</p>;
+
+        // Render
+        ReactDOM.render(
+            <div>
+                <App />
+                <LifecycleComponent />
+                <SSRDemo />
+            </div>,
+            document.getElementById("root")
+        );
+
+        // Best Practices
+        // Use React hooks for state and lifecycle management.
+        // Optimize SSR with Next.js for SEO and performance.
+        // Manage state with useState or Redux for complex apps.
+        // Test components with React Testing Library.
+    </script>
+</body>
+</html>

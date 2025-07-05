@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM Manipulation and Events</title>
+</head>
+<body>
+    <h1 id="title">Hello, JavaScript!</h1>
+    <button id="myButton">Click Me</button>
+    <ul id="list"></ul>
+
+    <script>
+        // DOM Manipulation and Events
+
+        // Selecting Elements
+        const title = document.getElementById("title");
+        const button = document.querySelector("#myButton");
+        const list = document.querySelector("#list");
+
+        // Modifying Elements
+        title.textContent = "Updated Title";
+        title.style.color = "blue";
+        button.innerHTML = "Updated Button";
+
+        // Creating and Removing Elements
+        const newItem = document.createElement("li");
+        newItem.textContent = "New Item";
+        list.appendChild(newItem);
+        // list.removeChild(newItem); // To remove
+
+        // Event Listeners
+        button.addEventListener("click", () => {
+            console.log("Button clicked!");
+            title.style.color = title.style.color === "blue" ? "black" : "blue";
+        });
+
+        // Event Types
+        document.addEventListener("keydown", (event) => {
+            console.log("Key pressed:", event.key);
+        });
+
+        // Event Delegation
+        list.addEventListener("click", (event) => {
+            if (event.target.tagName === "LI") {
+                console.log("List item clicked:", event.target.textContent);
+            }
+        });
+
+        // Advanced Event Handling
+        // Custom Events
+        const customEvent = new CustomEvent("myEvent", { detail: { message: "Custom Event Fired" } });
+        document.addEventListener("myEvent", (e) => {
+            console.log("Custom Event:", e.detail.message);
+        });
+        document.dispatchEvent(customEvent);
+
+        // Event Bubbling and Capturing
+        document.addEventListener("click", () => console.log("Document clicked (capturing)"), { capture: true });
+        button.addEventListener("click", () => console.log("Button clicked (bubbling)"));
+
+        // Event-Driven Architecture
+        class EventEmitter {
+            constructor() {
+                this.events = {};
+            }
+            on(event, callback) {
+                this.events[event] = this.events[event] || [];
+                this.events[event].push(callback);
+            }
+            emit(event, data) {
+                if (this.events[event]) this.events[event].forEach(cb => cb(data));
+            }
+        }
+        const emitter = new EventEmitter();
+        emitter.on("data", (data) => console.log("Emitter Data:", data));
+        emitter.emit("data", "Event-driven example");
+
+        // Best Practices
+        // Use querySelector for flexible element selection.
+        // Avoid inline event handlers; use addEventListener.
+        // Implement event delegation for dynamic elements.
+        // Use custom events for decoupled communication.
+        // Test event bubbling/capturing for complex UIs.
+    </script>
+</body>
+</html>
